@@ -101,7 +101,7 @@
 						<image>openjdk:17-jdk-slim</image>
 					</from>
 					<to>
-						<image>mangampire-transaction-service</image>
+						<image>mangampire-frontend-service</image>
 						<tags>
 							<tag>${project.version}</tag>
 						</tags>
