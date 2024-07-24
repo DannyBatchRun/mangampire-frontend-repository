@@ -1,0 +1,15 @@
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/model/Client.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/controller/FrontendController.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/service/FrontendServiceImpl.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/MangampireMainApplication.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/model/Manga.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/model/Shipment.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/dto/SearchClient.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/dto/RequestLogin.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/service/FrontendService.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/configuration/AppConfig.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/dto/SearchManga.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/dto/EndpointRequest.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/dto/ShoppingCart.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/dto/ClientCart.java
+/home/ubuntu/.jenkins/workspace/mangampire-frontend-build/src/main/java/org/altervista/mangampire/model/Card.java
