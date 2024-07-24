@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="icon" th:href="@{/images/site/favicon.ico}" type="image/ico">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mangampire</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body th:style="'background-color: #b3e5fc; background-image: url(' + @{/images/site/background.png} + ');'">
+<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd; border: 2px solid #b3e5fc;color: #0d47a1; font-family: 'Courier New', Courier, monospace;">
+<div class="container-fluid" >
+    <a class="navbar-brand" href="#"><img th:src="@{/images/site/logo.png}"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <form id="returnForm" class="d-flex" style="padding-left: 20px;" method="post" action="/return">
+                <button type="submit" class="btn btn-info"><strong>Torna alla Dashboard</strong></button>
+            </form>
+        </ul>
+        <form class="d-flex" style="padding-left: 20px;">
+            <strong th:text="${email}"></strong>
+        </form>
+        <form class="d-flex" style="padding-left: 20px;">
+            <a th:href="@{/logout}" style="text-decoration: none; color: white;">
+                <button type="button" class="btn btn-danger">
+                    <strong>Logout</strong>
+                </button>
+            </a>
+        </form>
+    </div>
+</div>
+</nav>
+<div class="container" style="background-color: #e3f2fd;">
+    <div class="text-center">
+        <h1 class="display-4 mt-5" style="color: #007bff; font-weight: 700; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
+            <strong>Pagamento</strong>
+        </h1>
+    </div>
+    <br />
+    <div class="alert alert-danger" role="alert">
+        Qualcosa è andato storto. Riprova.
+    </div>
+    <br />
+    <div class="row">
+        <div class="col md-3 sm-12">
+        </div>
+        <div class="col md-3 sm-12 text-center" style="color: #0d47a1; font-family: 'Courier New', Courier, monospace;">
+            <br />
+            <strong th:utext="${message}"></strong>
+            <br />
+            <strong th:utext="${shipment}"></strong>
+            <br />
+            <br />
+        </div>
+        <div class="col md-3 sm-12">
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<div class="container-fluid" style="background-color: #e3f2fd;">
+    <div class="row">
+        <div class="col text-center" style="color: #0d47a1; font-family: 'Courier New', Courier, monospace;">
+            <br />
+            Mangampire è un sito di esempio E-Commerce creato da <strong style="color: #0d47a1;">DannyBatchRun</strong> nel 2024.<br />
+            E' vietato riprodurre e copiare parti di codice, immagini senza permesso dell'autore.<br />
+            <br />
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
