@@ -3,11 +3,14 @@ package org.altervista.mangampire.model;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
 import java.util.Set;
 
 @Getter
 @Setter
 @Data
+@ToString
 public class Manga {
 
     private long idManga;
@@ -19,6 +22,7 @@ public class Manga {
 
     private String publisher;
     private double price;
+    private int quantity = 1;
 
     public Manga() {
 
@@ -32,12 +36,7 @@ public class Manga {
         this.publisher = publisher;
         this.price = price;
     }
-
-    @Override
-    public String toString() {
-        String forAdultOrNot = (restricted) ? "Is for adults" : "Is for all ages";
-        return "IDManga N°" + idManga + ", name: " + name + ", volume " + volume + " with genre: " + genre + ", author: " + author + ", publisher " + publisher + ". Price: " + price + " €. " + forAdultOrNot;
+    public boolean getRestricted() {
+        return restricted;
     }
-
-
 }

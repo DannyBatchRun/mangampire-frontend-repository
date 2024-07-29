@@ -4,9 +4,13 @@ import org.altervista.mangampire.model.Card;
 import org.altervista.mangampire.model.Client;
 import org.altervista.mangampire.model.SearchManga;
 import org.altervista.mangampire.dto.*;
+import org.altervista.mangampire.model.ShoppingCart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -74,7 +78,7 @@ public class FrontendServiceImpl implements FrontendService {
     }
 
     @Override
-    public String getCartClientFromBackend(EndpointRequest backendRequest, Client client) {
+    public ShoppingCart getCartClientFromBackend(EndpointRequest backendRequest, Client client) {
         backendRequest.setRequest("/cart/search");
         SearchClient clientSearch = new SearchClient();
         clientSearch.setIdClient(client.getIdClient());
@@ -83,7 +87,7 @@ public class FrontendServiceImpl implements FrontendService {
         clientSearch.setSurname(client.getSurname());
         clientSearch.setDateBirth(client.getDateBirth());
         String sendRequest = backendRequest.getEndpoint() + backendRequest.getRequest();
-        return restTemplate.postForObject(sendRequest, clientSearch, String.class);
+        return restTemplate.postForObject(sendRequest, clientSearch, ShoppingCart.class);
     }
     @Override
     public String addCardfromBackend(EndpointRequest backendRequest, RequestLogin requestLogin, Card card) {
@@ -101,7 +105,7 @@ public class FrontendServiceImpl implements FrontendService {
     }
 
     @Override
-    public ShoppingCart setShoppingCart(EndpointRequest backendRequest, RequestLogin clientCached, SearchManga manga) {
+    public SearchClientManga setShoppingCart(EndpointRequest backendRequest, RequestLogin clientCached, SearchManga manga) {
         Client client = getClientfromBackendService(backendRequest, clientCached);
         SearchClient clientSearch = new SearchClient();
         clientSearch.setIdClient(client.getIdClient());
@@ -109,17 +113,17 @@ public class FrontendServiceImpl implements FrontendService {
         clientSearch.setName(client.getName());
         clientSearch.setSurname(client.getSurname());
         clientSearch.setDateBirth(client.getDateBirth());
-        return new ShoppingCart(clientSearch,manga);
+        return new SearchClientManga(clientSearch,manga);
     }
     @Override
-    public String setAdditionCartRequestInBackend(EndpointRequest backendRequest, ShoppingCart shoppingCart) {
+    public String setAdditionCartRequestInBackend(EndpointRequest backendRequest, SearchClientManga searchClientManga) {
         String page = "index";
         backendRequest.setRequest("/cart/add");
         String urlAddCart = backendRequest.getEndpoint() + backendRequest.getRequest();
-        String response = restTemplate.postForObject(urlAddCart, shoppingCart, String.class);
-        if (response.contains("Added manga on shopping cart") ||
-                response.contains("Client have already at least one of this manga") ||
-                response.contains("Client not have a shopping cart. Created.")) {
+        String response = restTemplate.postForObject(urlAddCart, searchClientManga, String.class);
+        if(response.equalsIgnoreCase("Manga is not available")) {
+            page = "negozionostock";
+        } else if (response.contains("Manga added for idClient")) {
             page = "negozioadded";
         }
         return page;
@@ -145,6 +149,11 @@ public class FrontendServiceImpl implements FrontendService {
     @Override
     public String getDashboardOrThePage(boolean isLogged, String page) {
         return (isLogged) ? "dashboard" : page;
+    }
+    @Override
+    public Boolean clearCartClient(EndpointRequest backendRequest) {
+        String clearRequest = backendRequest.getEndpoint() + backendRequest.getRequest();
+        return restTemplate.getForObject(clearRequest,Boolean.class);
     }
     private boolean controlIfClientIsOnDatabase(RequestLogin requestLogin) {
         return false;

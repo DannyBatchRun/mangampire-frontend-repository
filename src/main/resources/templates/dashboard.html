@@ -76,7 +76,13 @@
             <strong>Carrello di </strong> <span th:text="${name}"></span>
         </h1>
         <br />
-        <img th:src="@{/images/site/cart.png}"><br />
+        <img th:src="@{/images/site/cart.png}">
+        <br />
+        <a th:href="@{/cart/clear}" style="text-decoration: none; color: white;" methods="delete">
+            <button type="button" class="btn btn-danger">
+                <strong>Svuota il Carrello</strong>
+            </button>
+        </a>
     </div>
     <br />
     <div class="row">
