@@ -12,11 +12,12 @@ public interface FrontendService {
     String doLoginRequest(EndpointRequest backendRequest, RequestLogin requestLogin);
     String addCardfromBackend(EndpointRequest backendRequest, RequestLogin requestLogin, Card card);
     String getCardsOfClientFromBackend(EndpointRequest backendRequest, long idCardHolder);
-    String getCartClientFromBackend(EndpointRequest backendRequest, Client client);
-    ShoppingCart setShoppingCart(EndpointRequest backendRequest, RequestLogin clientCached, SearchManga manga);
-    String setAdditionCartRequestInBackend(EndpointRequest backendRequest, ShoppingCart shoppingCart);
+    ShoppingCart getCartClientFromBackend(EndpointRequest backendRequest, Client client);
+    SearchClientManga setShoppingCart(EndpointRequest backendRequest, RequestLogin clientCached, SearchManga manga);
+    String setAdditionCartRequestInBackend(EndpointRequest backendRequest, SearchClientManga searchClientManga);
     String askBackendToCompleteTransaction(EndpointRequest backendRequest, RequestLogin loginCached, String cardNumber);
     Boolean askBackendToAddClient(EndpointRequest backendRequest, Client client);
     String getPageDependingCartClient(ClientCart clientCart);
+    Boolean clearCartClient(EndpointRequest backendRequest);
 
 }

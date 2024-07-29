@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 @Configuration
 public class AppConfig {
 
@@ -26,7 +29,7 @@ public class AppConfig {
     @Bean
     public RequestLogin loginCached() { return new RequestLogin(); }
     @Bean
-    public ClientCart clientCartCached() { return new ClientCart(); }
+    public Map<String, ClientCart> clientCartCached() { return new TreeMap<>(); }
     @Bean
     public Boolean sessionLogged() {
         return false;

@@ -9,7 +9,7 @@ import org.altervista.mangampire.model.SearchManga;
 import org.altervista.mangampire.dto.ClientCart;
 import org.altervista.mangampire.dto.EndpointRequest;
 import org.altervista.mangampire.dto.RequestLogin;
-import org.altervista.mangampire.dto.ShoppingCart;
+import org.altervista.mangampire.dto.SearchClientManga;
 import org.altervista.mangampire.service.FrontendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Controller
@@ -31,7 +32,13 @@ public class FrontendController {
     @Autowired
     private RequestLogin loginCached;
     @Autowired
-    private ClientCart clientCartCached;
+    private Map<String, ClientCart> clientCartCached;
+    @PostConstruct
+    public void init() {
+        System.out.println("Initializing localhost for Patch Request as default.");
+        backendService.setEndpoint("http://localhost:8100");
+        System.out.println("Backend Service ---> " + backendService.getEndpoint());
+    }
     @GetMapping("/")
     public String getLogin(Model model) throws JsonProcessingException {
         String page = service.getDashboardOrThePage(service.getSessionLogged(),"index");
@@ -69,29 +76,30 @@ public class FrontendController {
             model.addAttribute("surname", clientFound.getSurname());
             model.addAttribute("dateBirth", clientFound.getDateBirth());
             model.addAttribute("cardQuantity", clientFound.getCardQuantity());
-            String shoppingCart = service.getCartClientFromBackend(backendService, clientFound);
+            ShoppingCart shoppingCartClient = service.getCartClientFromBackend(backendService, clientFound);
             String cardsJson = service.getCardsOfClientFromBackend(backendService, clientFound.getIdClient());
-            if (shoppingCart == null) {
+            if (shoppingCartClient == null || shoppingCartClient.getManga() == null || shoppingCartClient.getManga().isEmpty()) {
                 model.addAttribute("totalPrice", "0");
                 model.addAttribute("shoppingCart", "Carrello Vuoto");
+                ClientCart emptyClientCart = new ClientCart("",0.0);
+                clientCartCached.put(clientFound.getEmail(),emptyClientCart);
             } else {
-                List<Map<String, Object>> list = mapper.readValue(shoppingCart, new TypeReference<List<Map<String, Object>>>() {
-                });
                 double totalPrice = 0;
                 StringBuilder formattedJson = new StringBuilder();
-                for (Map<String, Object> map : list) {
-                    String name = (String) map.get("name");
-                    int volume = (Integer) map.get("volume");
-                    int quantity = (Integer) map.get("quantity");
-                    double price = (Double) map.get("price");
+                for (Manga manga : shoppingCartClient.getManga()) {
+                    String name = manga.getName();
+                    int volume = manga.getVolume();
+                    int quantity = manga.getQuantity();
+                    double price = manga.getPrice();
                     formattedJson.append("Nome: ").append(name).append(", Volume: ").append(volume).append(", Quantità: ").append(quantity).append("<br />");
                     totalPrice += price * quantity;
-                    model.addAttribute("shoppingCart", formattedJson.toString());
-                    model.addAttribute("totalPrice", String.format("%.2f", totalPrice));
-                    clientCartCached.setCartFormatted(formattedJson.toString());
-                    clientCartCached.setTotalPrice(totalPrice);
                 }
+                model.addAttribute("shoppingCart", formattedJson.toString());
+                model.addAttribute("totalPrice", String.format("%.2f", totalPrice));
+                ClientCart clientCart = new ClientCart(formattedJson.toString(),totalPrice);
+                clientCartCached.put(clientFound.getEmail(),clientCart);
             }
+
             List<Card> cardList = mapper.readValue(cardsJson, new TypeReference<List<Card>>() {});
             StringBuilder formattedCards = new StringBuilder();
             for (Card card : cardList) {
@@ -150,8 +158,8 @@ public class FrontendController {
         String page = "";
         if(service.getSessionLogged()) {
             model.addAttribute("email", loginCached.getEmail());
-            ShoppingCart shoppingCart = service.setShoppingCart(backendService, loginCached, manga);
-            page = service.setAdditionCartRequestInBackend(backendService,shoppingCart);
+            SearchClientManga searchClientManga = service.setShoppingCart(backendService, loginCached, manga);
+            page = service.setAdditionCartRequestInBackend(backendService, searchClientManga);
         } else if (!service.getSessionLogged()) {
             page = "index";
         }
@@ -165,7 +173,8 @@ public class FrontendController {
     public String getThePageOfTransaction(Model model) throws JsonProcessingException {
         if(service.getSessionLogged()) {
             model.addAttribute("email", loginCached.getEmail());
-            model.addAttribute("totalPrice", clientCartCached.getTotalPrice());
+            ClientCart clientCart = clientCartCached.get(loginCached.getEmail());
+            model.addAttribute("totalPrice", clientCart.getTotalPrice());
             Client clientFound = service.getClientfromBackendService(backendService, loginCached);
             String cardsJson = service.getCardsOfClientFromBackend(backendService, clientFound.getIdClient());
             List<Card> cardList = mapper.readValue(cardsJson, new TypeReference<List<Card>>() {});
@@ -177,7 +186,11 @@ public class FrontendController {
             }
             model.addAttribute("cards", formattedCardsAbsolute);
             model.addAttribute("cardsComplete", formattedCardsComplete);
-            return service.getPageDependingCartClient(clientCartCached);
+            if(clientCart.getCartFormatted().isEmpty() && clientCart.getTotalPrice() == 0.0) {
+                return "nocart";
+            } else {
+                return "payment";
+            }
         } else {
             return "index";
         }
@@ -231,4 +244,20 @@ public class FrontendController {
         }
         return page;
     }
+    @GetMapping("/cart/clear")
+    public String askBackendToClearCartClient(Model model) throws JsonProcessingException {
+        String page = "index";
+        Client clientFound = service.getClientfromBackendService(backendService, loginCached);
+        backendService.setRequest("/cart/clear?idClient=" + clientFound.getIdClient());
+        Boolean cleared = service.clearCartClient(backendService);
+        if(Boolean.TRUE.equals(cleared)) {
+            page = tryToLoginPlatform(loginCached, model);
+            ClientCart clientCart = new ClientCart("",0.0);
+            clientCartCached.put(clientFound.getEmail(),clientCart);
+        } else {
+            page = "nocart";
+        }
+        return page;
+    }
+
 }
