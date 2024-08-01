@@ -1,8 +1,7 @@
 package org.altervista.mangampire.service;
 
-import org.altervista.mangampire.model.*;
-import org.altervista.mangampire.model.SearchManga;
 import org.altervista.mangampire.dto.*;
+import org.altervista.mangampire.model.*;
 
 public interface FrontendService {
     boolean getSessionLogged();

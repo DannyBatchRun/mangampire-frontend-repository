@@ -1,4 +1,4 @@
-package org.altervista.mangampire.model;
+package org.altervista.mangampire.dto;
 
 import lombok.Data;
 import lombok.Getter;

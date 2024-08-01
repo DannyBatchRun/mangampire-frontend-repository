@@ -1,16 +1,12 @@
 package org.altervista.mangampire.service;
 
+import org.altervista.mangampire.dto.*;
 import org.altervista.mangampire.model.Card;
 import org.altervista.mangampire.model.Client;
-import org.altervista.mangampire.model.SearchManga;
-import org.altervista.mangampire.dto.*;
 import org.altervista.mangampire.model.ShoppingCart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.altervista.mangampire.model.Client;
 import org.altervista.mangampire.model.*;
-import org.altervista.mangampire.model.SearchManga;
+import org.altervista.mangampire.dto.SearchManga;
 import org.altervista.mangampire.dto.ClientCart;
 import org.altervista.mangampire.dto.EndpointRequest;
 import org.altervista.mangampire.dto.RequestLogin;
@@ -202,15 +202,15 @@ public class FrontendController {
         if(service.getSessionLogged()) {
             model.addAttribute("email", loginCached.getEmail());
             String responseBuy = service.askBackendToCompleteTransaction(backendService,loginCached,cardNumber);
-            if(responseBuy.contains("is out of stock at the moment")) {
+            if(responseBuy.contains("NOT FOUND")) {
                 page = "paymentfailed";
                 message = "Uno o più manga risultano non disponibili. Per favore, riprova tra qualche giorno.";
                 model.addAttribute("shipment", "Torna alla Dashboard");
-            } else if (responseBuy.contains("has no enough credit for buy total cart")) {
+            } else if (responseBuy.contains("PAYMENT REQUIRED")) {
                 page = "paymentfailed";
                 message = "La Carta non ha un importo sufficiente per continuare. Per favore, seleziona un altra carta.";
                 model.addAttribute("shipment", "Torna alla Dashboard");
-            } else if (responseBuy.contains("Shopping cart buyed successful")) {
+            } else if (responseBuy.contains("OK")) {
                 page = "paymentsuccess";
                 message = "Acquisto Effettuato con Successo! I Manga verranno spediti ai seguenti dati :\n";
                 String formattedShipment = "<h3>" + shipment.getName() + " " + shipment.getSurname() + "</h3>" + shipment.getAddress() + "<br />" + shipment.getPostalCode() + " " + shipment.getCity();

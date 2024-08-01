@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.altervista.mangampire.model.SearchManga;
 
 @Data
 @Getter
