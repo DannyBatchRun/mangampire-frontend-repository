@@ -1,6 +1,7 @@
 org/altervista/mangampire/MangampireMainApplication.class
 org/altervista/mangampire/configuration/AppConfig.class
 org/altervista/mangampire/model/Client.class
+org/altervista/mangampire/dto/SearchManga.class
 org/altervista/mangampire/model/Manga.class
 org/altervista/mangampire/model/Card.class
 org/altervista/mangampire/controller/FrontendController$2.class
@@ -14,5 +15,4 @@ org/altervista/mangampire/model/Shipment.class
 org/altervista/mangampire/dto/RequestLogin.class
 org/altervista/mangampire/dto/SearchClientManga.class
 org/altervista/mangampire/controller/FrontendController.class
-org/altervista/mangampire/model/SearchManga.class
 org/altervista/mangampire/controller/FrontendController$1.class
